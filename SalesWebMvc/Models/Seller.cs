@@ -10,11 +10,18 @@ namespace SalesWebMvc.Models
 
         [Required]
         public string Name { get; set; }
-
+        
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [Display(Name="Birth Date")]
+        [DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}")]
         public DateTime BirthDate { get; set; }
+
+        [Display(Name = "Base Salary")]
+        [DisplayFormat(DataFormatString ="{0:F2}")]
         public double BaseSalary { get; set; }
 
 
