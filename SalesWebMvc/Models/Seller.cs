@@ -8,13 +8,14 @@ namespace SalesWebMvc.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="{0} is required")]
+        [StringLength(60,MinimumLength =3,ErrorMessage ="{0} should be between {2} and {1} characters")]
         public string Name { get; set; }
         
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is required")]
         [DataType(DataType.Date)]
         [Display(Name="Birth Date")]
         [DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}")]
