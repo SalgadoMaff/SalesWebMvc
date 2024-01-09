@@ -4,6 +4,7 @@ using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 using SalesWebMvc.Services.Exceptions;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace SalesWebMvc.Controllers
 {
@@ -11,6 +12,7 @@ namespace SalesWebMvc.Controllers
     {
         private readonly SellerService _sellerService;
         private readonly DepartmentService _departmentService;
+
         public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             _sellerService = sellerService;
@@ -35,7 +37,7 @@ namespace SalesWebMvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var departments =  await _departmentService.FindAllAsync();
+                var departments = await _departmentService.FindAllAsync();
                 var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
                 return View(viewModel);
             }
@@ -61,13 +63,22 @@ namespace SalesWebMvc.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult > Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _sellerService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _sellerService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+
+            }
         }
 
-        public async Task<IActionResult > Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
             {
@@ -81,7 +92,7 @@ namespace SalesWebMvc.Controllers
             return View(obj);
         }
 
-        public async Task<IActionResult >Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
             {
