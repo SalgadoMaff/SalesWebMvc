@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers
@@ -22,7 +23,7 @@ namespace SalesWebMvc.Controllers
             {
                 min = new DateTime(DateTime.Now.Year, 1, 1);
             }
-            if(!max.HasValue)
+            if (!max.HasValue)
             {
                 max = DateTime.Now;
             }
@@ -32,9 +33,20 @@ namespace SalesWebMvc.Controllers
             return View(result);
         }
 
-        public IActionResult GroupingSearch()
+        public  IActionResult GroupingSearch(DateTime? min, DateTime? max)
         {
-            return View();
+            if (!min.HasValue)
+            {
+                min = new DateTime(DateTime.Now.Year, 1, 1);
+            }
+            if (!max.HasValue)
+            {
+                max = DateTime.Now;
+            }
+            ViewData["min"] = min.Value.ToString("yyyy-MM-dd");
+            ViewData["max"] = max.Value.ToString("yyyy-MM-dd");
+            var result = _salesRecordService.FindByDateGrouping(min, max);
+            return View(result.AsEnumerable());
         }
     }
 }
