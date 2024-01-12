@@ -47,7 +47,7 @@ namespace SalesWebMvc.Services
             foreach (var item in result)
             {
                 var sellerAux = s.Find(x => x.Id == item.Seller.Id);
-                var depAux = d.Find(x => x.Id == sellerAux.Id);
+                var depAux = d.Find(x => x.Id == sellerAux.DepartmentId);
                 ret.Add(new MergedTable
                 {
                     DepartmentId = depAux.Id,
@@ -75,15 +75,8 @@ namespace SalesWebMvc.Services
                 }
                 i++;
             }
-            return ret;
-            /*
-            return result
-                .Include(x => x.Seller)
-                .Include(x => x.Seller.Department)
-                .OrderByDescending(x => x.Date)
-                .GroupBy(x => x.Seller.Department)
-                .ToList();
-            */
+            return ret.OrderByDescending(x=>x.DepartmentId).ToList();
+            
 
 
         }
