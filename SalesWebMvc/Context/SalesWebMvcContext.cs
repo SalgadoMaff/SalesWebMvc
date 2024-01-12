@@ -18,6 +18,7 @@ namespace SalesWebMvc.Context
         public DbSet<Seller> Seller { get; set; }
         public DbSet<SalesRecord> SalesRecord { get; set; }
 
+        /*
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
@@ -25,6 +26,7 @@ namespace SalesWebMvc.Context
             
 
         }
+        */
 
     }
 }
